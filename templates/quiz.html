@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>簿記クイズ - 簿記学習アプリ</title>
+    <!-- Tailwind CSSの導入 -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* iPhoneの枠画像の設定 */
+        .iphone-frame {
+            position: relative;
+            width: 100%;
+            max-width: 380px;
+            margin: 0 auto;
+        }
+
+        .iphone-frame img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .screen-content {
+            position: absolute;
+            top: 4.4%;
+            left: 8%;
+            width: 84.3%;
+            height: 91.1%;
+            background: white;
+            border-radius: 40px;
+            padding: 0px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ヘッダーの背景画像設定 */
+        .header {
+            position: relative;
+            text-align: center;
+            margin-bottom: 20px;
+            overflow: hidden;
+            width: 100%; /* スクリーン幅全体をカバー */
+            border-radius: 40px 40px 0 0; 
+        }
+
+        .header img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            filter: brightness(0.75); /* 画像を少し暗くしてテキストを強調 */
+        }
+
+        .header h1 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 48%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 1.6rem;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: 700; /* タイトルを太字に */
+        }
+
+        /* メインコンテンツの調整 */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 20px;
+            background-color: #f8fafc; /* 背景に淡いブルーを追加 */
+        }
+
+        /* 質問のスタイル */
+        .quiz-question {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease; /* アニメーションを追加 */
+        }
+
+        .quiz-question:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .quiz-question h2 {
+            font-size: 1.25rem;
+            margin-bottom: 10px;
+            color: #1e3a8a; /* 質問のテキストカラーをより鮮やかなブルーに */
+            font-weight: 700; /* 質問のテキストを太字に */
+        }
+
+        .quiz-option {
+            margin-bottom: 10px;
+        }
+
+        .quiz-option label {
+            font-size: 1rem;
+            cursor: pointer;
+            color: #1f2937; /* オプションのテキストカラー */
+            transition: background-color 0.3s, color 0.3s; /* ホバー時の効果 */
+            padding: 8px;
+            display: block;
+            border-radius: 5px;
+            font-weight: 500; /* オプションのテキストを少し太字に */
+        }
+
+        .quiz-option input[type="radio"] {
+            margin-right: 8px;
+        }
+
+        .quiz-option:hover label {
+            background-color: #e0f2fe; /* ホバー時の背景色 */
+            color: #0369a1; /* ホバー時のテキストカラー */
+            font-weight: 600; 
+        }
+
+        /* カメラ部分の画像を最上面に配置 */
+        .camera-image {
+            position: absolute;
+            top: 1%; /* カメラ部分が自然に表示されるように調整 */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 35%;
+            z-index: 2;
+        }
+
+        /* フッター */
+        .footer {
+            text-align: center;
+            padding: 10px;
+            background-color: white;
+            border-top: 1px solid #e5e7eb;
+            box-sizing: border-box;
+            border-radius: 0 0 40px 40px; 
+            color: #374151;
+            font-size: 0.75rem;
+        }
+
+        /* ボタンの色 */
+        .btn-submit {
+            background-color: #10b981;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 700; 
+            transition: background-color 0.3s, transform 0.2s ease; /* ボタンのアニメーションを追加 */
+        }
+
+        .btn-submit:hover {
+            background-color: #059669; /* ホバー時のボタン色 */
+            transform: scale(1.05); /* ボタンが少し大きくなる */
+        }
+    </style>
+</head>
+<body class="bg-gray-200 flex items-center justify-center min-h-screen">
+
+    <div class="iphone-frame">
+        <img src="{{ url_for('static', filename='image.png') }}" alt="iPhone Frame">
+        <div class="screen-content">
+            <div class="camera-image">
+            <!-- カメラ部分の画像 -->
+                <img src="{{ url_for('static', filename='image_2.png') }}" alt="iPhone Camera">
+            </div>
+            <!-- ヘッダー画像 -->
+            <div class="header">
+                <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" alt="Study Background">
+                <h1 class="text-2xl font-bold bg-black bg-opacity-50 p-3 rounded">簿記クイズ</h1>
+            </div>
+
+            <!-- メインコンテンツ -->
+            <div class="main-content">
+                <form method="POST" action="{{ url_for('quiz') }}">
+                    {% for i, quiz in enumerate(quizzes) %}
+                        <div class="quiz-question">
+                            <h2>{{ i + 1 }}. {{ quiz['question'] }}</h2>
+                            <div>
+                                {% for option in quiz['options'] %}
+                                    <div class="quiz-option">
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="question-{{ i }}" value="{{ option }}" class="form-radio text-blue-600">
+                                            <span>{{ option }}</span>
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <div class="text-center mt-6">
+                        <button type="submit" class="btn-submit">クイズを提出</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- フッター -->
+            <footer class="footer">
+                &copy; 2024 Study & Relax. All rights reserved.
+            </footer>
+        </div>
+    </div>
+
+</body>
+</html>
